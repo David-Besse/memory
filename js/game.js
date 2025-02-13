@@ -1,44 +1,44 @@
+// État du jeu
+let etatJeu = {
+  cartesRetournees: [],
+  pairesRestantes: 8,
+};
+
 /**
  * Fonction pour créer des paires de cartes à partir d'un ensemble de lettres.
  * Cette fonction double chaque lettre dans le tableau pour créer des paires.
  * @returns {Array} - Un tableau contenant les paires de lettres.
  */
 const creerPaires = () => {
+  // Déclare un tableau de lettres uniques
   const lettres = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+  // Retourne un nouveau tableau contenant chaque lettre deux fois
   return [...lettres, ...lettres];
 };
 
 /**
- * Mélange les cartes de manière aléatoire en utilisant la fonction
- * `Array.prototype.sort()` et une fonction de tri aléatoire.
+ * Fonction pour mélanger les cartes.
  * @param {Array} cartes - Le tableau de cartes à mélanger.
- * @returns {Array} - Le tableau de cartes mélangé.
+ * @returns {Array} - Le tableau de cartes mélanger aléatoirement.
  */
 const melangerCartes = (cartes) => {
-  // Copie le tableau de cartes pour éviter de modifier le tableau original
-  const cartesMelangees = [...cartes];
-
-  // Mélange les cartes en utilisant une fonction de tri aléatoire
-  cartesMelangees.sort(() => Math.random() - 0.5);
-
-  // Retourne le tableau de cartes mélangé
-  return cartesMelangees;
+  // Copie le tableau de cartes et le mélange en utilisant une fonction de tri aléatoire
+  return [...cartes].sort(() => Math.random() - 0.5);
 };
 
 /**
- * Crée une carte avec la lettre et l'index actuels.
+ * Fonction pour créer une carte.
  * @param {string} lettre - La lettre à afficher sur la carte.
  * @param {number} index - L'index de la carte.
  * @returns {HTMLDivElement} - L'élément DOM de la carte.
  */
 const creerCarte = (lettre, index) => {
-  // Crée un élément de type <div> pour la carte
   const carte = document.createElement("div");
   carte.className = "carte";
   carte.dataset.valeur = lettre;
   carte.dataset.index = index;
 
-  // Ajoute le code HTML pour la face et le dos de la carte
   carte.innerHTML = `
         <div class="face">${lettre}</div>
         <div class="dos"></div>
@@ -46,14 +46,6 @@ const creerCarte = (lettre, index) => {
 
   return carte;
 };
-
-// État du jeu
-let etatJeu = {
-  cartesRetournees: [],
-  pairesRestantes: 8,
-};
-
-// Gestionnaires d'événements
 
 /**
  * Vérifie si les deux cartes retournées forment une paire.
@@ -108,7 +100,9 @@ const gererClicCarte = (event) => {
 };
 
 /**
- * Fonction pour réinitialiser le jeu sans recharger la page.
+ * Fonction pour réinitialiser le jeu.
+ * Cette fonction réinitialise l'état du jeu, efface les cartes de la grille
+ * et ajoute de nouvelles cartes mélanger aléatoirement.
  */
 const initialiserJeu = () => {
   // Réinitialise l'état du jeu
@@ -117,9 +111,11 @@ const initialiserJeu = () => {
     pairesRestantes: 8,
   };
 
-  // Récupère l'élément de la grille où les cartes seront ajoutées
+  // Récupère l'élément de la grille
   const grille = document.getElementById("grille");
-  grille.innerHTML = ""; // Efface les cartes existantes
+
+  // Efface les cartes existantes
+  grille.innerHTML = "";
 
   // Crée les paires de cartes, les mélange et les stocke dans un tableau
   const cartesMelangees = melangerCartes(creerPaires());
@@ -137,8 +133,5 @@ const initialiserJeu = () => {
   });
 };
 
-// Gestionnaire d'événement pour le clic sur le bouton de redémarrage
-const recommencer = document.querySelector(".restart");
-recommencer.addEventListener("click", initialiserJeu); // Appelle la fonction pour réinitialiser le jeu
-
-initialiserJeu();
+// Exportation de la fonction initialiserJeu
+export { initialiserJeu };
